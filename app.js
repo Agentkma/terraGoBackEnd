@@ -7,6 +7,7 @@ const admin = require('firebase-admin');
 const express = require('express');
 
 const app = express();
+const port = Number(process.env.PORT || 3000);
 
 // parse incoming requests
 app.use(bodyParser.json());
@@ -81,7 +82,7 @@ app.use((req, res, next) => {
 	next(err);
 });
 
-// listen on port 3000
-app.listen(3000, () => {
-	console.log('Express app listening on port 3000');
+// listen on port Heroku Link OR 3000
+app.listen(port, () => {
+	console.log(`Express app listening on port ${port}.`);
 });
