@@ -1,4 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const Promise = require('bluebird');
+mongoose.Promise = Promise;
 const User = require('../models/users.js');
 const Ride = require('../models/rides.js');
 const router = express.Router();
@@ -7,19 +10,33 @@ const mid = require('../middleware');
 // GET / user profile
 router.get('/user', (req, res, next) => {
 	//get info if userId in place
-	User.findById(req.userId).exec((error, user) => {
+	const query = User.findOne({ userId: req.userId });
+
+	query.exec((error, user) => {
 		if (error) {
 			return next(error);
 		}
-		return res.send('profile', {
-			name: user.name,
-			location: user.location,
-			bio: user.bio
-		});
+
+		const status = 200;
+		return res.status(status).send(user);
 	});
 });
 
-// PATCH  / update profile
+// PUT  / update profile
+router.put('/user', (req, res, next) => {
+	//   create object
+	const profileData = {
+		userId: req.userId || null,
+		name: req.body.name,
+		location: req.body.location,
+		bio: req.body.bio
+	};
+
+	//use schema's create method to insert into db
+	User.update(profileData)
+		.then(() => res.send('update profile success'))
+		.catch(next);
+});
 
 //POST / create profile
 router.post('/user', (req, res, next) => {
@@ -32,8 +49,6 @@ router.post('/user', (req, res, next) => {
 			location: req.body.location,
 			bio: req.body.bio
 		};
-
-		console.log('route profileData object', profileData);
 
 		//use schema's create method to insert into db
 		User.create(profileData, error => {
@@ -49,6 +64,23 @@ router.post('/user', (req, res, next) => {
 		error.status = 400;
 		return next(error);
 	}
+});
+
+// GET / all rides
+router.get('/ride', (req, res, next) => {
+	//get info if userId in place
+	const query = Ride.find({ userId: req.userId });
+	console.log('userId', req.userId);
+
+	query.exec((error, ride) => {
+		if (error) {
+			return next(error);
+		}
+
+		const status = 200;
+		console.log(ride);
+		return res.status(status).send(ride);
+	});
 });
 
 // POST /ride
@@ -96,10 +128,20 @@ router.post('/ride', (req, res, next) => {
 	}
 });
 
-// GET /about
-router.get('/about', (req, res, next) => res.render('about', { title: 'About' }));
+// DELETE / selected ride
+router.delete('/ride/:id', (req, res, next) => {
+	const id = req.params.id;
+	console.log('url param', id);
+	const query = Ride.deleteOne({ userId: req.userId, _id: id });
 
-// GET /contact
-router.get('/contact', (req, res, next) => res.render('contact', { title: 'Contact' }));
+	query.exec((error, user) => {
+		if (error) {
+			return next(error);
+		}
+
+		const status = 200;
+		return res.status(status).send(user);
+	});
+});
 
 module.exports = router;

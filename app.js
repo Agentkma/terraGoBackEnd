@@ -4,7 +4,6 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const routes = require('./routes/index');
 const admin = require('firebase-admin');
-const serviceAccount = require('./trainride-5d227-firebase-adminsdk-2ed8g-7050d51ac5.json');
 const express = require('express');
 
 const app = express();
@@ -36,14 +35,18 @@ admin.initializeApp({
 });
 
 // Authenticate user before CRUD: "idToken" comes from the client app/ terraGO
+
 app.use((req, res, next) => {
-	const idToken = req.body.userId;
+	// TODO	 change to 1st idToken below after hosting...and confirm getting value
+	// const idToken = req.auth.userId;
+	// this idToken just for Postman testing purposes
+	const idToken = req.rawHeaders[3];
+
 	admin
 		.auth()
 		.verifyIdToken(idToken)
 		.then(decodedToken => {
 			const userId = decodedToken.uid;
-
 			req.userId = userId;
 			next();
 		})
