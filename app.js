@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 // const MongoStore = require('connect-mongo')(session);
 
 //mongoDB connection
-mongoose.connect('mongodb://localhost:27017/terraGoBackEnd', {
+mongoose.connect(process.env.DB_URL, {
 	useMongoClient: true
 });
 const db = mongoose.connection;
@@ -38,10 +38,11 @@ admin.initializeApp({
 // Authenticate user before CRUD: "idToken" comes from the client app/ terraGO
 
 app.use((req, res, next) => {
-	// TODO	 change to 1st idToken below after hosting...and confirm getting value
+	if (req.baseUrl === '/') {
+		res.json({});
+	}
 	const idToken = req.auth.userId;
 	// this idToken just for Postman testing purposes
-	// const idToken = req.rawHeaders[3];
 
 	admin
 		.auth()
