@@ -16,7 +16,7 @@ app.use(morgan('dev'));
 
 // stores login info on mongo
 // const MongoStore = require('connect-mongo')(session);
-
+console.log('MONGO CONNECTION', process.env.DB_URL);
 //mongoDB connection
 mongoose.connect(process.env.DB_URL, {
 	useMongoClient: true
