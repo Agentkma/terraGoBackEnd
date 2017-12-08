@@ -39,7 +39,7 @@ admin.initializeApp({
 
 app.use((req, res, next) => {
 	if (req.baseUrl === '/') {
-		res.json({});
+		return res.json({});
 	}
 	const idToken = req.auth.userId;
 	// this idToken just for Postman testing purposes
