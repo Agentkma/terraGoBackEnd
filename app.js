@@ -39,9 +39,9 @@ admin.initializeApp({
 
 app.use((req, res, next) => {
 	// TODO	 change to 1st idToken below after hosting...and confirm getting value
-	// const idToken = req.auth.userId;
+	const idToken = req.auth.userId;
 	// this idToken just for Postman testing purposes
-	const idToken = req.rawHeaders[3];
+	// const idToken = req.rawHeaders[3];
 
 	admin
 		.auth()
