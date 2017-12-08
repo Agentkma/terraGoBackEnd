@@ -30,7 +30,7 @@ admin.initializeApp({
 	credential: admin.credential.cert({
 		projectId: 'trainride-5d227',
 		clientEmail: 'firebase-adminsdk-2ed8g@trainride-5d227.iam.gserviceaccount.com',
-		privateKey: process.env.PRIVATE_KEY
+		privateKey: JSON.parse(process.env.PRIVATE_KEY)
 	}),
 	databaseURL: 'https://trainRide.firebaseio.com'
 });
