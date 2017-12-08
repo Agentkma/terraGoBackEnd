@@ -5,7 +5,6 @@ mongoose.Promise = Promise;
 const User = require('../models/users.js');
 const Ride = require('../models/rides.js');
 const router = express.Router();
-const mid = require('../middleware');
 
 // GET / user profile
 router.get('/user', (req, res, next) => {
@@ -70,7 +69,6 @@ router.post('/user', (req, res, next) => {
 router.get('/ride', (req, res, next) => {
 	//get info if userId in place
 	const query = Ride.find({ userId: req.userId });
-	console.log('userId', req.userId);
 
 	query.exec((error, ride) => {
 		if (error) {
@@ -78,7 +76,7 @@ router.get('/ride', (req, res, next) => {
 		}
 
 		const status = 200;
-		console.log(ride);
+
 		return res.status(status).send(ride);
 	});
 });
