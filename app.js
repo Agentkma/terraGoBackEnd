@@ -31,6 +31,7 @@ admin.initializeApp({
 		projectId: 'trainride-5d227',
 		clientEmail: 'firebase-adminsdk-2ed8g@trainride-5d227.iam.gserviceaccount.com',
 		privateKey: JSON.parse(process.env.PRIVATE_KEY)
+		// privateKey: process.env.PRIVATE_KEY
 	}),
 	databaseURL: 'https://trainRide.firebaseio.com'
 });
@@ -38,7 +39,8 @@ admin.initializeApp({
 // Authenticate user before CRUD: "idToken" comes from the client app/ terraGO
 
 app.use((req, res, next) => {
-	if (req.baseUrl === '/') {
+	console.log('REQ.BASEURL', req.baseUrl);
+	if (req.baseUrl === '') {
 		return res.json({});
 	}
 	const idToken = req.auth.userId;
