@@ -42,27 +42,27 @@ admin.initializeApp({
 app.use((req, res, next) => {
 	console.log('AUTH HEADER', req.header('Authorization'));
 
-	// if (req.header('Authorization') === null || req.header('Authorization') === undefined) {
-	// console.log(req.header('Authorization'));
-	const idToken = req.header('Authorization');
-	admin
-		.auth()
-		.verifyIdToken(idToken)
-		.then(decodedToken => {
-			const userId = decodedToken.uid;
-			req.userId = userId;
-			next();
-		})
-		.catch(err => {
-			// Handle error
-			console.log(err);
-			err = new Error('User Not Authenticated');
-			err.status = 401;
-			next(err);
-		});
-	// } else {
-	// 	res.send('no auth header sent');
-	// }
+	if (req.header('Authorization') === null || req.header('Authorization') === undefined) {
+		res.send('no auth header sent');
+	} else {
+		// console.log(req.header('Authorization'));
+		const idToken = req.header('Authorization');
+		admin
+			.auth()
+			.verifyIdToken(idToken)
+			.then(decodedToken => {
+				const userId = decodedToken.uid;
+				req.userId = userId;
+				next();
+			})
+			.catch(err => {
+				// Handle error
+				console.log(err);
+				err = new Error('User Not Authenticated');
+				err.status = 401;
+				next(err);
+			});
+	}
 });
 
 // include routes
