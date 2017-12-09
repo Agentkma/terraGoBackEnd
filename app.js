@@ -30,8 +30,9 @@ admin.initializeApp({
 	credential: admin.credential.cert({
 		projectId: 'trainride-5d227',
 		clientEmail: 'firebase-adminsdk-2ed8g@trainride-5d227.iam.gserviceaccount.com',
-		privateKey: JSON.parse(process.env.PRIVATE_KEY)
-		// privateKey: process.env.PRIVATE_KEY
+		// privateKey: JSON.parse(process.env.PRIVATE_KEY)
+		//  Uncomment private key below when testing locally/Postman
+		privateKey: process.env.PRIVATE_KEY
 	}),
 	databaseURL: 'https://trainRide.firebaseio.com'
 });
@@ -39,13 +40,11 @@ admin.initializeApp({
 // Authenticate user before CRUD: "idToken" comes from the client app/ terraGO
 
 app.use((req, res, next) => {
-	console.log('REQ.BASEURL', req.baseUrl);
-	if (req.baseUrl === '') {
-		return res.json({});
-	}
-	const idToken = req.auth.userId;
-	// this idToken just for Postman testing purposes
+	console.log('AUTH HEADER', req.header('Authorization'));
 
+	// if (req.header('Authorization') === null || req.header('Authorization') === undefined) {
+	// console.log(req.header('Authorization'));
+	const idToken = req.header('Authorization');
 	admin
 		.auth()
 		.verifyIdToken(idToken)
@@ -61,6 +60,9 @@ app.use((req, res, next) => {
 			err.status = 401;
 			next(err);
 		});
+	// } else {
+	// 	res.send('no auth header sent');
+	// }
 });
 
 // include routes
