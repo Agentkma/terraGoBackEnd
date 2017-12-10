@@ -46,7 +46,9 @@ app.use((req, res, next) => {
 		res.send('no auth header sent');
 	} else {
 		// console.log(req.header('Authorization'));
-		const idToken = req.header('Authorization');
+		let idToken = req.header('Authorization');
+		idToken = idToken.i;
+
 		admin
 			.auth()
 			.verifyIdToken(idToken)
