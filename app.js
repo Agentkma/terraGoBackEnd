@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const routes = require('./routes/index');
 const admin = require('firebase-admin');
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -13,6 +14,7 @@ const port = Number(process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
+app.use(cors());
 
 // stores login info on mongo
 // const MongoStore = require('connect-mongo')(session);

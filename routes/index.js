@@ -11,6 +11,7 @@ router.get('/user', (req, res, next) => {
 	//get info if userId in place
 	const query = User.findOne({ userId: req.userId });
 	console.log('query', query, 'req.userId', req.userId);
+
 	query.exec((error, user) => {
 		if (error) {
 			return next(error);
