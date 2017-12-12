@@ -10,7 +10,6 @@ const router = express.Router();
 router.get('/user', (req, res, next) => {
 	//get info if userId in place
 	const query = User.findOne({ userId: req.userId });
-	console.log('query', query, 'req.userId', req.userId);
 
 	query.exec((error, user) => {
 		if (error) {
@@ -31,6 +30,7 @@ router.put('/user', (req, res, next) => {
 		location: req.body.location,
 		bio: req.body.bio
 	};
+	console.log('PROFILE DATA', profileData);
 
 	//use schema's create method to insert into db
 	User.update(profileData)
@@ -109,8 +109,6 @@ router.post('/ride', (req, res, next) => {
 			notes: req.body.notes
 		};
 
-		console.log('route rideData object', rideData);
-
 		//use schema's create method to insert into db
 		Ride.create(rideData, error => {
 			if (error) {
@@ -130,16 +128,16 @@ router.post('/ride', (req, res, next) => {
 // DELETE / selected ride
 router.delete('/ride/:id', (req, res, next) => {
 	const id = req.params.id;
-	console.log('url param', id);
+
 	const query = Ride.deleteOne({ userId: req.userId, _id: id });
 
-	query.exec((error, user) => {
+	query.exec(error => {
 		if (error) {
 			return next(error);
 		}
 
 		const status = 200;
-		return res.status(status).send(user);
+		return res.status(status).send('Delete Ride Success');
 	});
 });
 
